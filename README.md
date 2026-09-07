@@ -69,6 +69,11 @@ sign-language-ai/
   > It includes 26 alphabet signs along with an extra { class.   
 
 ## Installation
+1. First download the indian sign language dataset from kaggle.
+2. Install the required tools from requirements.txt .
+3. Run train_model.py to train the machine.
+4. run live_demo.py to turn on the image capturing and test it.
+
 ## Run It
 ```bash
 python src/train_model.py
@@ -92,9 +97,24 @@ python src/live_demo.py
 |Accuracy | 99.64%|
 
 
-## Limitations
+> [!TIP]
+> 
+>  Due to an almost perfect accuracy score, the letter predicted may not always be correct. This is merely a simple model to learn the basics of machine learning.
 ## What's next
-1. Add a 2 hand image capture 
+1. Add a 2 hand image capture
+2. Increase the accuracy score to a hundred.
+3. Augment more data into the dataset for better prediction.
+4. Include other sign language datasets like American Sign Language or British Sign Language to widen the range.
+5. Move from alphabets to words.
+    
 ## Conclusion
+> The following project is an Indian Sign Language Alphabet Detection System that detects the 27 alphabets of the Indian Sign Language using a live web-cam for realtime demo.
+> When a hand is detected, it looks for the position of the 63 numerical features and predicts the alphabet.
 ## Author
+__Manha Ayyan Kuzhiyan__
+ [Github](https://github.com/leffraun)
 ## References
+- [Indian Sign Language Alphabet Dataset – Kaggle](https://www.kaggle.com/datasets/rushilverma07/indian-sign-language-alphabet-dataset)
+- [MediaPipe Documentation](https://ai.google.dev/edge/mediapipe/solutions/guide)
+- [OpenCV Documentation](https://docs.opencv.org/)
+- [Scikit-learn Documentation](https://scikit-learn.org/stable/)
