@@ -2,7 +2,8 @@
 venv/
 
 # Raw dataset
-dataset/
+dataset/*
+!dataset/.gitkeep
 
 # Python cache
 __pycache__/
