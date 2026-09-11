@@ -2,7 +2,7 @@
 venv/
 
 # Raw dataset
-dataset/dataset - Gesture Speech/
+dataset/
 
 # Python cache
 __pycache__/
