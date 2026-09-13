@@ -1,30 +1,36 @@
-from pathlib import Path
 import pandas as pd
 import joblib
 
+from pathlib import Path
+
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
 
 
-# Find the project folder
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-# File paths
-CSV_PATH = PROJECT_ROOT / "landmarks" / "landmarks.csv"
-MODEL_PATH = PROJECT_ROOT / "models" / "sign_language_rf.pkl"
+DATA_PATH = PROJECT_ROOT / "landmarks" / "landmarks.csv"
+MODEL_PATH = PROJECT_ROOT / "models" / "bsl_sign_language_rf.pkl"
 
 
-# 1. Load the landmark data
-df = pd.read_csv(CSV_PATH)
+# Load data
+df = pd.read_csv(DATA_PATH)
 
+print("Dataset shape:", df.shape)
 
-# 2. Separate features and labels
-X = df.drop("label", axis=1)
+# Separate labels from features
+X = df.drop(columns=["label"])
 y = df["label"]
 
+print("\nClasses:")
+print(sorted(y.unique()))
 
-# 3. Split into training and testing data
+print("\nClass counts:")
+print(y.value_counts().sort_index())
+
+
+# Train/test split
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
@@ -34,28 +40,53 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 
-# 4. Create the Random Forest model
+print("\nTraining samples:", len(X_train))
+print("Testing samples:", len(X_test))
+
+
+# Create model
 model = RandomForestClassifier(
-    n_estimators=100,
-    random_state=42
+    n_estimators=200,
+    random_state=42,
+    n_jobs=-1
 )
 
 
-# 5. Train the model
+# Train
+print("\nTraining Random Forest...")
+
 model.fit(X_train, y_train)
 
 
-# 6. Make predictions
+# Predict
 y_pred = model.predict(X_test)
 
 
-# 7. Calculate accuracy
+# Accuracy
 accuracy = accuracy_score(y_test, y_pred)
 
-print(f"Accuracy: {accuracy:.2%}")
+print("\n==============================")
+print("TRAINING COMPLETE")
+print("==============================")
+
+print(f"Accuracy: {accuracy * 100:.2f}%")
 
 
-# 8. Save the trained model
+# Detailed results
+print("\nClassification Report:")
+print(
+    classification_report(
+        y_test,
+        y_pred,
+        zero_division=0
+    )
+)
+
+
+# Save model
+MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+
 joblib.dump(model, MODEL_PATH)
 
-print(f"Model saved to: {MODEL_PATH}")
+print(f"\nModel saved to:")
+print(MODEL_PATH)

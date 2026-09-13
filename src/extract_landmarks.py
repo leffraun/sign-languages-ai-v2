@@ -3,20 +3,13 @@ import cv2
 import csv
 from pathlib import Path
 
-# --------------------------------------------------
-# 1. Project paths
-# --------------------------------------------------
-
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-DATASET_PATH = PROJECT_ROOT / "dataset" / "dataset - Gesture Speech"
+DATASET_PATH = PROJECT_ROOT / "dataset" / "images"
 MODEL_PATH = PROJECT_ROOT / "models" / "hand_landmarker.task"
 OUTPUT_PATH = PROJECT_ROOT / "landmarks" / "landmarks.csv"
 
-
-# --------------------------------------------------
-# 2. MediaPipe setup
-# --------------------------------------------------
+OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 BaseOptions = mp.tasks.BaseOptions
 HandLandmarker = mp.tasks.vision.HandLandmarker
@@ -31,24 +24,10 @@ options = HandLandmarkerOptions(
     num_hands=1
 )
 
-
-# --------------------------------------------------
-# 3. CSV header
-# --------------------------------------------------
-
 header = ["label"]
 
 for i in range(21):
-    header.extend([
-        f"x{i}",
-        f"y{i}",
-        f"z{i}"
-    ])
-
-
-# --------------------------------------------------
-# 4. Process the dataset
-# --------------------------------------------------
+    header.extend([f"x{i}", f"y{i}", f"z{i}"])
 
 total_images = 0
 successful_images = 0
@@ -59,11 +38,8 @@ with HandLandmarker.create_from_options(options) as landmarker:
     with open(OUTPUT_PATH, "w", newline="") as csv_file:
 
         writer = csv.writer(csv_file)
-
-        # Write column names
         writer.writerow(header)
 
-        # Go through every class folder
         for class_folder in sorted(DATASET_PATH.iterdir()):
 
             if not class_folder.is_dir():
@@ -73,42 +49,43 @@ with HandLandmarker.create_from_options(options) as landmarker:
 
             print(f"\nProcessing class: {label}")
 
-            # Get all JPG images
-            images = list(class_folder.glob("*.jpg"))
+            images = [
+                file
+                for file in class_folder.iterdir()
+                if file.is_file()
+                and file.suffix.lower() in [".jpg", ".jpeg", ".png"]
+            ]
 
             for image_path in images:
 
                 total_images += 1
 
                 try:
-                    # Load image
+
                     image = cv2.imread(str(image_path))
 
                     if image is None:
                         failed_images += 1
                         continue
 
-                    # Convert BGR → RGB
-                    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                    image = cv2.cvtColor(
+                        image,
+                        cv2.COLOR_BGR2RGB
+                    )
 
-                    # Convert to MediaPipe image
                     mp_image = mp.Image(
                         image_format=mp.ImageFormat.SRGB,
                         data=image
                     )
 
-                    # Detect hand
                     result = landmarker.detect(mp_image)
 
-                    # Skip if no hand was detected
                     if not result.hand_landmarks:
                         failed_images += 1
                         continue
 
-                    # Get first detected hand
                     hand = result.hand_landmarks[0]
 
-                    # Make one row
                     row = [label]
 
                     for landmark in hand:
@@ -118,17 +95,20 @@ with HandLandmarker.create_from_options(options) as landmarker:
                             landmark.z
                         ])
 
-                    # Save row
                     writer.writerow(row)
 
                     successful_images += 1
 
                 except Exception as e:
-                    failed_images += 1
-                    print(f"Error processing {image_path}: {e}")
 
-                # Progress
+                    failed_images += 1
+
+                    print(
+                        f"Error processing {image_path}: {e}"
+                    )
+
                 if total_images % 100 == 0:
+
                     print(
                         f"Images processed: {total_images} | "
                         f"Successful: {successful_images} | "
@@ -136,14 +116,9 @@ with HandLandmarker.create_from_options(options) as landmarker:
                     )
 
 
-# --------------------------------------------------
-# 5. Final report
-# --------------------------------------------------
-
 print("\n==============================")
 print("EXTRACTION COMPLETE")
 print("==============================")
-
 print(f"Total images:      {total_images}")
 print(f"Successful:        {successful_images}")
 print(f"Failed/skipped:    {failed_images}")
