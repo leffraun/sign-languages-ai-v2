@@ -10,7 +10,7 @@
 
 > Problem Statement
 > 
-> Build a machine learning system that recognises the indian sign language alphabets from images.
+> Build a machine learning system that recognises the british sign language alphabets from images.
 > A hand has __21 landmarks__ and each of these landmarks has its own x, y and z coordinates (where x is the horizontal distance, y the vertical distance and z is the extended depth) which in turn makes it __21 x 3 = 63 numerical features__ to track.
 > A feature is the input or the question you give to the machine and the label is the answer of that question. The system checks whether the machine has gotten the answer right by comparing the label and based on how it does on the test, the accuracy score is predicted.
 
