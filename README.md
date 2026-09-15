@@ -14,7 +14,6 @@
 > A hand has __21 landmarks__ and each of these landmarks has its own x, y and z coordinates (where x is the horizontal distance, y the vertical distance and z is the extended depth) which in turn makes it __21 x 3 = 63 numerical features__ to track.
 > A feature is the input or the question you give to the machine and the label is the answer of that question. The system checks whether the machine has gotten the answer right by comparing the label and based on how it does on the test, the accuracy score is predicted.
 
-<img width="200" height="200" alt="image representing the 21 landmarks of a hand" aria-labe src="https://github.com/user-attachments/assets/78ae8696-3428-4410-8a8e-c5bdd46b53db" style="margin:10%;" />
 
 ## Methodology
   ### Brief Info on the tools used:
@@ -50,7 +49,8 @@ sign-language-ai/
 │
 ├── models/
 │   |── hand_landmarker.task
-|   |__ sign_language_rf.pkl  
+|   |__ sign_language_rf.pkl
+|   |__ bsl_sign_language_rf.pkl
 │
 ├── src/
 │   ├── test_landmarker.py
@@ -58,9 +58,12 @@ sign-language-ai/
 │   ├── extract_landmarks.py
 │   |── train_model.py
 |   └──live_demo.py
+|   |__ bsl_webcam.py
+|    |__ prepare_dataset.py
 │
 ├── .gitignore
 ├── README.md
+|__ requirements.txt
 ```
 ## Dataset
   > The original data used to train the machine has been utilised from the [kaggle indian sign language dataset](https://www.kaggle.com/datasets/rushilverma07/indian-sign-language-alphabet-dataset?resource=download).
