@@ -1,5 +1,5 @@
 
-# British Sign Language Alphabet Recognition 
+# British Sign Language (BSL) fingerspelling alphabet - Prototype
 
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?logo=opencv&logoColor=white)
@@ -11,35 +11,36 @@
 > Problem Statement
 > 
 > Build a machine learning system that recognises the british sign language alphabets from images.
-> A hand has __21 landmarks__ and each of these landmarks has its own x, y and z coordinates (where x is the horizontal distance, y the vertical distance and z is the extended depth) which in turn makes it __21 x 3 = 63 numerical features__ to track.
+> 
 > A feature is the input or the question you give to the machine and the label is the answer of that question. The system checks whether the machine has gotten the answer right by comparing the label and based on how it does on the test, the accuracy score is predicted.
 
 
 ## Methodology
-  ### Brief Info on the tools used:
-  - Python
-    > Primary programming language used to train the dataset.
-  - openCv:
-    > Used for image and camera input and basic image processing.
-  - MediaPipe:
-    > To collect the 63 landmarks of the hands.
-  - Pandas
-    > To convert the data received from MediaPipe into a csv.
-  - Scikit-learn
-    > A toolset to train the machine model.
-    > It creates the random Forest.
-    > It provides accuracy predictions.
-  - Matplotlib
-    > Used to visualise data and model performance through graphs and plots.
-  - Random Forest
-    > The machine learning model that we are training using the features (input) and labels (answers) to test machine's knowledge on predicting which alphabet is the given picture.
+
+ ```
+Webcam/Image
+     ↓
+OpenCV
+     ↓
+MediaPipe
+     ↓
+21 landmarks
+     ↓
+x,y,z coordinates
+     ↓
+63 features
+```
+
+
   
-  ### Feature Extraction
-  <p>OpenCv captures the 63 features of the hand and MediaPipe converts the given data into csv which is stored in landmarks.csv</p> 
+## Feature Extraction
+  > MediaPipe detects the hand and extracts 21 landmarks. Each landmark contains x, y and z coordinates, resulting in 63 numerical features per image.
+> These features are stored in landmarks.csv and later used as input to the Random Forest classifier.
   
 ## Project Structure
+
 ```text
-sign-language-ai/
+sign-language-ai-v2/
 │
 ├── dataset/
 │   └── .gitkeep
@@ -65,23 +66,39 @@ sign-language-ai/
 ├── README.md
 |__ requirements.txt
 ```
-## Dataset
-  > The original data used to train the machine has been utilised from the [kaggle indian sign language dataset](https://www.kaggle.com/datasets/rushilverma07/indian-sign-language-alphabet-dataset?resource=download).
-> In this repository, the dataset has not been given so kindly add it if you do wish to try it.
 
-  > It includes 26 alphabet signs along with an extra { class.   
+## Dataset
+- The BSL data used in this prototype was obtained from the [Kaggle BSL Fingerspelling Dataset](https://www.kaggle.com/datasets/alifsathar/bsl-fingerspelling-dataset).
+- The dataset itself is not included in this repository.
+- The available dataset was highly imbalanced. Most of the extracted samples belonged to the A and B classes, while several other classes contained only a small number of samples.
+-  H and J were also absent from the available data.
+- For this prototype, the available images were combined and a new 80/20 stratified train/test split was created.
 
 ## Installation
-1. First download the indian sign language dataset from kaggle.
-2. Install the required tools from requirements.txt .
-3. Run train_model.py to train the machine.
-4. run live_demo.py to turn on the image capturing and test it.
+1. Download the British Sign Language (BSL) Fingerspelling Dataset from Kaggle.
+2. Place the dataset in the project's dataset/ directory.
+3. Install the required Python packages listed in requirements.txt.
+4. Run the dataset preparation script.
+5. Extract the hand landmarks.
+6. Train the Random Forest model.
 
 ## Run It
 ```bash
+Prepare the dataset:
+
+python src/prepare_dataset.py
+
+Extract hand landmarks:
+
+python src/extract_landmarks.py
+
+Train the model:
+
 python src/train_model.py
 
-python src/live_demo.py
+Run the BSL webcam prototype:
+
+python src/bsl_webcam.py
 ```
 > [!NOTE]
 >
@@ -91,33 +108,52 @@ python src/live_demo.py
 
 | Item | Details |
 |---|---:|
-|Dataset| Indian Sign Language Alphabet Dataset |
+|Dataset| British Sign Language Fingerspelling Dataset |
 | Hand Landmarks | 21 |
 |Model | Random Forest |
 |Features per image| 63|
-|Classes| 27|
+|Classes| 24|
 |Test Split| 20%|
-|Accuracy | 99.64%|
+|Test Accuracy| 99.64%|
 
+> [!NOTE]
+>
+> The 99.64% test accuracy was obtained using the newly constructed 80/20 stratified split of the available extracted data.
+>
+> Because the dataset is highly imbalanced, this accuracy does not represent reliable real-world webcam performance.
+>
+> Webcam testing showed poor generalisation to new hand gestures.
 
-> [!TIP]
-> 
->  Due to an almost perfect accuracy score, the letter predicted may not always be correct. This is merely a simple model to learn the basics of machine learning.
+## Limitations
+
+- The available dataset is highly imbalanced.
+- A and B account for the majority of the extracted samples.
+- H and J are absent from the available dataset.
+- The current model therefore does not represent a complete BSL alphabet.
+- Webcam testing showed poor generalisation despite the high test accuracy.
+- The prototype uses a single detected hand, while BSL fingerspelling can involve two hands.
+- The system recognises individual letters rather than complete words or sentences.
+
 ## What's next
-1. Add a 2 hand image capture
-2. Increase the accuracy score to a hundred.
-3. Augment more data into the dataset for better prediction.
-4. Include other sign language datasets like American Sign Language or British Sign Language to widen the range.
-5. Move from alphabets to words.
+1. Use a larger and more balanced BSL dataset.
+2. Improve generalisation to real-world webcam inputs.
+3. Investigate data augmentation techniques.
+4. Compare different machine learning models.
+5. Explore recognition of complete words rather than individual letters.
     
 ## Conclusion
-> The following project is an Indian Sign Language Alphabet Detection System that detects the 27 alphabets of the Indian Sign Language using a live web-cam for realtime demo.
-> When a hand is detected, it looks for the position of the 63 numerical features and predicts the alphabet.
+
+> This project is a prototype for British Sign Language (BSL) fingerspelling recognition using hand landmarks and a Random Forest classifier.
+>
+> MediaPipe detects 21 hand landmarks from an image or webcam frame. The x, y and z coordinates of these landmarks produce 63 numerical features, which are then passed to the trained Random Forest model to predict a letter.
+>
+>Although the model achieved high test accuracy on the available dataset, webcam testing revealed poor generalisation. The main limitations were the severe class imbalance and the lack of data for several letters.
+
 ## Author
 __Manha Ayyan Kuzhiyan__
  [Github](https://github.com/leffraun)
 ## References
-- [Indian Sign Language Alphabet Dataset – Kaggle](https://www.kaggle.com/datasets/rushilverma07/indian-sign-language-alphabet-dataset)
+- [British Fingerspelling Dataset – Kaggle](https://www.kaggle.com/datasets/alifsathar/bsl-fingerspelling-dataset)
 - [MediaPipe Documentation](https://ai.google.dev/edge/mediapipe/solutions/guide)
 - [OpenCV Documentation](https://docs.opencv.org/)
 - [Scikit-learn Documentation](https://scikit-learn.org/stable/)
