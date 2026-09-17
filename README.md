@@ -59,8 +59,9 @@ sign-language-ai-v2/
 │   ├── extract_landmarks.py
 │   |── train_model.py
 |   └──live_demo.py
-|   |__ bsl_webcam.py
-|    |__ prepare_dataset.py
+|   └── bsl_webcam.py
+    └── evaluate_model.py
+|   └── prepare_dataset.py
 │
 ├── .gitignore
 ├── README.md
