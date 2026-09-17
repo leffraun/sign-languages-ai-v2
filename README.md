@@ -114,7 +114,7 @@ python src/bsl_webcam.py
 |Features per image| 63|
 |Classes| 24|
 |Test Split| 20%|
-|Test Accuracy| 99.64%|
+|Test Accuracy| 96.72%|
 
 > [!NOTE]
 >
@@ -148,6 +148,14 @@ python src/bsl_webcam.py
 > MediaPipe detects 21 hand landmarks from an image or webcam frame. The x, y and z coordinates of these landmarks produce 63 numerical features, which are then passed to the trained Random Forest model to predict a letter.
 >
 >Although the model achieved high test accuracy on the available dataset, webcam testing revealed poor generalisation. The main limitations were the severe class imbalance and the lack of data for several letters.
+>
+ ## Evaluation
+
+The model achieved an overall test accuracy of 96.72% on 1,159 test samples. However, the dataset was highly imbalanced, with A and B accounting for the vast majority of the samples.
+
+The model achieved high F1-scores for A (0.99) and B (0.98), while most other classes had very limited test samples and received an F1-score of 0. The macro F1-score was 0.18, indicating poor and uneven performance across classes.
+
+Therefore, the overall accuracy should not be interpreted as representative of real-world BSL recognition performance. Webcam testing also showed poor generalisation to new hand gestures.
 
 ## Author
 __Manha Ayyan Kuzhiyan__
