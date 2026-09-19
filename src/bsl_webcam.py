@@ -3,7 +3,7 @@ import mediapipe as mp
 import joblib
 import numpy as np
 from pathlib import Path
-
+import pandas as pd
 
 # -----------------------------
 # Paths
@@ -119,7 +119,14 @@ with HandLandmarker.create_from_options(options) as landmarker:
 
             # Predict letter
 
-            prediction = model.predict(features)[0]
+            feature_names = []
+
+            for i in range(21):
+                feature_names.extend([f"x{i}", f"y{i}", f"z{i}"])
+
+            features_df = pd.DataFrame(features, columns=feature_names)
+
+            prediction = model.predict(features_df)
 
 
             # Display prediction
