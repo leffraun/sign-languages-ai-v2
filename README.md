@@ -125,6 +125,22 @@ python src/bsl_webcam.py
 >
 > Webcam testing showed poor generalisation to new hand gestures.
 
+## Webcam Demo
+
+```text
+
+Dataset
+   ↓
+Severely imbalanced
+   ↓
+Model performs well on A/B
+   ↓
+Very little training data for most letters
+   ↓
+Poor webcam generalisation
+
+```
+
 ## Limitations
 
 - The available dataset is highly imbalanced.
