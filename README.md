@@ -1,5 +1,6 @@
 
 # British Sign Language (BSL) fingerspelling alphabet - Prototype
+<!--demo and questionnaire pending -->
 
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?logo=opencv&logoColor=white)
