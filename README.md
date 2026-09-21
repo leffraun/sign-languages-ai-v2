@@ -18,17 +18,21 @@
 ## Methodology
 
  ```
-Webcam/Image
-     ↓
-OpenCV
-     ↓
-MediaPipe
-     ↓
-21 landmarks
-     ↓
-x,y,z coordinates
-     ↓
-63 features
+BSL image dataset
+       ↓
+combine available images
+       ↓
+MediaPipe hand detection
+       ↓
+21 landmarks × 3 coordinates
+       ↓
+63 numerical features
+       ↓
+Random Forest
+       ↓
+letter prediction
+       ↓
+webcam test
 ```
 
 
@@ -127,6 +131,14 @@ python src/bsl_webcam.py
 
 ## Webcam Demo
 
+<p>A webcam prototype was implemented using OpenCV and MediaPipe.
+
+The system successfully detected and classified some of the dominant classes, particularly A and B. However, most other letters were not reliably recognised during live testing.
+
+This revealed a significant limitation of the current dataset: the model had very little training data for many classes.
+
+The webcam experiment therefore demonstrated that high test accuracy on this dataset did not translate into reliable real-world recognition.</p>
+
 ```text
 
 Dataset
@@ -151,6 +163,15 @@ Poor webcam generalisation
 - The prototype uses a single detected hand, while BSL fingerspelling can involve two hands.
 - The system recognises individual letters rather than complete words or sentences.
 
+  | Item | Details |
+|---|---:|
+|Available classes| 24 |
+| Test samples | 1519 |
+|Accuracy | 96.72% |
+|Macro F1| 0.18 |
+   Strong classes| A,B |
+  Webcam results| A/B worked. Others are pending|
+
 ## What's next
 1. Use a larger and more balanced BSL dataset.
 2. Improve generalisation to real-world webcam inputs.
@@ -173,6 +194,14 @@ The model achieved an overall test accuracy of 96.72% on 1,159 test samples. How
 The model achieved high F1-scores for A (0.99) and B (0.98), while most other classes had very limited test samples and received an F1-score of 0. The macro F1-score was 0.18, indicating poor and uneven performance across classes.
 
 Therefore, the overall accuracy should not be interpreted as representative of real-world BSL recognition performance. Webcam testing also showed poor generalisation to new hand gestures.
+
+### Class Distribution
+
+![Class Distribution](class_distribution.png)
+
+### Confusion Matrix
+
+![Confusion Matrix](confusion_matrix.png)
 
 ## Author
 __Manha Ayyan Kuzhiyan__
