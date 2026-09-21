@@ -164,7 +164,7 @@ Poor webcam generalisation
 - The prototype uses a single detected hand, while BSL fingerspelling can involve two hands.
 - The system recognises individual letters rather than complete words or sentences.
 
-  | Item | Details |
+| Item | Details |
 |---|---:|
 |Available classes| 24 |
 | Test samples | 1519 |
